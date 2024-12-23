@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_vehicle_needs_service" model="ir.cron">
+        <field name="name">Update Vehicle Needs Service</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False" />
+        <field name="model_id" ref="model_my_company_vehicle" />
+        <field name="active">False</field>
+        <field name="code">
+            model.search([])._compute_needs_service()
+        </field>
+    </record>
+
+</odoo>
