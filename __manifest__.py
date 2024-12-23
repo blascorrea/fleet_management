@@ -7,5 +7,7 @@
     "category": "Fleet",
     "version": "0.1",
     "depends": ["contacts"],
-    "data": [],
+    "data": [
+        "views/res_partner_views.xml",
+    ],
 }
