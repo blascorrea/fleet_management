@@ -41,3 +41,9 @@ class Vehicle(models.Model):
                 or (fields.Date.today() - vehicle.last_service_date).days
                 > MONTHS_TO_SERVICE * 30
             )
+
+    @api.onchange("fuel_type")
+    def _onchange_fuel_type(self):
+        for vehicle in self:
+            if vehicle.fuel_type == "electric":
+                vehicle.mileage = 0
