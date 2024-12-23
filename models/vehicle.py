@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
+from odoo.exceptions import ValidationError
 
 FUEL_TYPE = [("gasoline", "Gasoline"), ("diesel", "Diesel"), ("electric", "Electric")]
 MONTHS_TO_SERVICE = 6
@@ -30,6 +31,11 @@ class Vehicle(models.Model):
         store=True,
     )
 
+    @api.model
+    def _validate_license_plate(self, license_plate):
+        if self.search_count([("license_plate", "=", license_plate)]) > 0:
+            raise ValidationError(_("License Plate already exists"))
+
     # COMPUTED FIELDS
     @api.depends("mileage", "last_service_date")
     def _compute_needs_service(self):
@@ -47,3 +53,16 @@ class Vehicle(models.Model):
         for vehicle in self:
             if vehicle.fuel_type == "electric":
                 vehicle.mileage = 0
+
+    # OVERRIDES
+    @api.model_create_multi
+    def create(self, vals):
+        license_plates = list(map(lambda x: x.get("license_plate").upper(), vals))
+        if len(set(license_plates)) != len(license_plates):
+            raise ValidationError(_("License Plate must be unique"))
+        for val in vals:
+            # Save the license plate in uppercase
+            val["license_plate"] = val.get("license_plate").upper()
+            self._validate_license_plate(val["license_plate"])
+
+        return super().create(vals)
