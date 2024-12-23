@@ -11,6 +11,8 @@
         "data/group_data.xml",
         "data/cron_data.xml",
         "security/ir.model.access.csv",
+        "views/menu_root_views.xml",
         "views/res_partner_views.xml",
+        "views/vehicle_views.xml",
     ],
 }

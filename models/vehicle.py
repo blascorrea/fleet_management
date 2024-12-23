@@ -54,6 +54,10 @@ class Vehicle(models.Model):
             if vehicle.fuel_type == "electric":
                 vehicle.mileage = 0
 
+    # ACTIONS
+    def action_schedule_service(self):
+        """Show a popup to schedule the service."""
+
     # OVERRIDES
     @api.model_create_multi
     def create(self, vals):

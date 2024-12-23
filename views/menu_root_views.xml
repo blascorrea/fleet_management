@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_root"
+        name="Fleet Management"
+        sequence="10"
+        groups="fleet_management.group_vehicle_manager"
+    />
+
+</odoo>
