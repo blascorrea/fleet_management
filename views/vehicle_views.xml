@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="my_company_vehicle_view_search" model="ir.ui.view">
+        <field name="name">my.company.vehicle.view.search</field>
+        <field name="model">my.company.vehicle</field>
+        <field name="arch" type="xml">
+            <search string="Vehicle Search View">
+                <field name="name" />
+                <field name="license_plate" />
+                <filter name="needs_service" string="Needs Service" domain="[('needs_service', '=', True)]" />
+                <group expand="0" string="Group By">
+                    <filter string="Owner" name="owner" domain="[]" context="{'group_by' : 'partner_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="my_company_vehicle_view_tree" model="ir.ui.view">
+        <field name="name">my.company.vehicle.view.tree</field>
+        <field name="model">my.company.vehicle</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicle Tree View">
+                <field name="name" />
+                <field name="license_plate" />
+                <field name="fuel_type" />
+                <field name="mileage" />
+                <field name="last_service_date" />
+                <field name="needs_service" />                
+            </tree>
+        </field>
+    </record>
+
+    <record id="my_company_vehicle_view_kanban" model="ir.ui.view">
+        <field name="name">my.company.vehicle.view.kanban</field>
+        <field name="model">my.company.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name" />
+                <field name="mileage" />
+                <field name="last_service_date" />
+                <field name="needs_service" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header flex-grow-inf">
+                                <div class="o_kanban_card_header_title mb16">
+                                    <h3><t t-esc="record.name.value" /></h3>
+                                </div>
+                                <div class="container o_kanban_card_content">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            Mileage: 
+                                        </div>
+                                        <div class="col-6">
+                                            <t t-esc="record.mileage.value" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            Last Service Date: 
+                                        </div>
+                                        <div class="col-6">
+                                            <t t-esc="record.last_service_date.value" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            Needs Service:
+                                        </div>
+                                        <div class="col-6">
+                                            <t t-if="record.needs_service.raw_value">
+                                                Yes
+                                            </t>
+                                            <t t-else="">
+                                                No
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="oe_kanban_details d-flex flex-column justify-content-between mt4">
+                                    <div class="row">
+                                        <div class="col-12 o_kanban_primary_left">
+                                            <button
+                                                class="btn btn-primary"
+                                                name="action_schedule_service"
+                                                type="object"
+                                                string="Schedule Service"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="my_company_vehicle_view_form" model="ir.ui.view">
+        <field name="name">my.company.vehicle.view.form</field>
+        <field name="model">my.company.vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Form View">
+                <header>
+                    <button
+                        name="action_schedule_service"
+                        type="object"
+                        string="Schedule Service"
+                        class="btn btn-primary"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="license_plate" />
+                            <field name="fuel_type" />
+                            <field name="partner_id" />
+                        </group>
+                        <group>
+                            <field name="mileage" />
+                            <field name="last_service_date" />
+                            <field name="needs_service" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="my_company_vehicle_action" model="ir.actions.act_window">
+        <field name="name">Vehicles</field>
+        <field name="res_model">my.company.vehicle</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <menuitem
+        id="vehicle_menu"
+        name="Vehicles"
+        action="my_company_vehicle_action"
+        parent="fleet_management.menu_root"
+        groups="fleet_management.group_vehicle_manager"
+        sequence="1"
+    />
+
+</odoo>
